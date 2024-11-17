@@ -496,7 +496,12 @@ lazy val bench = project
   .enablePlugins(NoPublishPlugin)
   .enablePlugins(AutomateHeaderPlugin)
   .enablePlugins(JmhPlugin)
-  .dependsOn(core, postgres)
+  .settings(
+    libraryDependencies ++= (if (scalaVersion.value == scala212Version)
+                               Seq("org.scala-lang.modules" %% "scala-collection-compat" % "2.12.0")
+                             else Seq.empty)
+  )
+  .dependsOn(core, postgres, hikari)
   .settings(doobieSettings)
 
 lazy val docs = project
